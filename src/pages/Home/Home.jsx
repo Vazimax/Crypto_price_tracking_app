@@ -1,8 +1,18 @@
-import React from 'react'
-import './Home.css'
-
+import React, { useContext, useEffect, useState } from 'react';
+import './Home.css';
+import { CoinContext } from '../../context/CoinContext';
 
 const Home = () => {
+  const { allCoin, currency } = useContext(CoinContext);
+  const [displayCoin, setDisplayCoin] = useState([]);
+
+  useEffect(() => {
+    console.log('allCoin in Home:', allCoin); // Log allCoin to ensure it's populated
+    if (allCoin && allCoin.length > 0) {
+      setDisplayCoin(allCoin);
+    }
+  }, [allCoin]);
+
   return (
     <div className='Home'>
       <div className='Hero'>
@@ -22,9 +32,18 @@ const Home = () => {
           <p>24H Change</p>
           <p>Market Cap</p>
         </div>
+        {displayCoin.slice(0, 10).map((item, index) => (
+          <div key={index}>
+            <p>{item.market_cap_rank}</p>
+            <div>
+              <img src={item.image} alt={item.name} />
+              <p>{`${item.name} (${item.symbol})`}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
